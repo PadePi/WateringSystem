@@ -1,5 +1,6 @@
 package com.example.peti.wateringsystem;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
@@ -16,6 +17,6 @@ public interface MeasurementDAO {
     void deleteAll();
 
     @Query("SELECT * from measurements ORDER BY date DESC")
-    List<Measurement> getAllMeasurement();
+    LiveData<List<Measurement>> getAllMeasurement();
 
 }

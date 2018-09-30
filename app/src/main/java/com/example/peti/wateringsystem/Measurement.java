@@ -42,6 +42,10 @@ public class Measurement {
         return waterPercentage;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setDate(@NonNull Date date) {
         this.date = date;
     }
