@@ -1,5 +1,6 @@
 package com.example.peti.wateringsystem;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -82,14 +83,25 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_stat) {
+            openStatActivity();
 
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_schedule) {
+            openScheduleActivity();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void openStatActivity(){
+        Intent intent = new Intent(this,StatActivity.class);
+        startActivity(intent);
+    }
+
+    public void openScheduleActivity(){
+        Intent intent = new Intent(this,ScheduleActivity.class);
+        startActivity(intent);
     }
 }
