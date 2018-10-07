@@ -21,7 +21,7 @@ public class MeasurementListAdapter extends RecyclerView.Adapter<MeasurementList
     }
 
         private final LayoutInflater mInflater;
-        private List<Measurement> mMeasurements; // Cached copy of words
+        private List<Measurement> mMeasurements; // Cached copy of measurements
 
         MeasurementListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
 
@@ -35,7 +35,7 @@ public class MeasurementListAdapter extends RecyclerView.Adapter<MeasurementList
         public void onBindViewHolder(MeasurementViewHolder holder, int position) {
             if (mMeasurements != null) {
                 Measurement current = mMeasurements.get(position);
-                holder.MeasurementItemView.setText(current.getWaterPercentage());
+                holder.MeasurementItemView.setText(String.valueOf(current.getWaterPercentage()));
             } else {
                 // Covers the case of data not being ready yet.
                 holder.MeasurementItemView.setText("No Percentage");

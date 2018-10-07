@@ -17,7 +17,7 @@ public class MeasurementViewModel extends AndroidViewModel {
         mAllMeasurements = mRepository.getmAllMeasurements();
     }
 
-    LiveData<List<Measurement>> getmAllMeasurements() { return mAllMeasurements; }
+    LiveData<List<Measurement>> getAllMeasurements() { return mAllMeasurements; }
 
     public void insert(Measurement measurement) { mRepository.insert(measurement); }
 
