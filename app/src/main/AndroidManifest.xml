@@ -19,9 +19,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StatActivity" />
-        <activity android:name=".ScheduleActivity" />
-        <activity android:name=".NewWordActivity"></activity>
+        <activity android:name=".StatActivity"
+            android:parentActivityName=".MainActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".ScheduleActivity"
+            android:parentActivityName=".MainActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".NewWordActivity"
+            android:parentActivityName=".StatActivity"
+            android:launchMode="singleTop"></activity>
     </application>
 
 </manifest>
