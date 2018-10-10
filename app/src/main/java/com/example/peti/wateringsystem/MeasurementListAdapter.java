@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class MeasurementListAdapter extends RecyclerView.Adapter<MeasurementListAdapter.MeasurementViewHolder> {
@@ -19,6 +21,8 @@ public class MeasurementListAdapter extends RecyclerView.Adapter<MeasurementList
             MeasurementItemView = itemView.findViewById(R.id.textView);
         }
     }
+
+        private DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
         private final LayoutInflater mInflater;
         private List<Measurement> mMeasurements; // Cached copy of measurements
@@ -35,7 +39,11 @@ public class MeasurementListAdapter extends RecyclerView.Adapter<MeasurementList
         public void onBindViewHolder(MeasurementViewHolder holder, int position) {
             if (mMeasurements != null) {
                 Measurement current = mMeasurements.get(position);
-                holder.MeasurementItemView.setText(String.valueOf(current.getWaterPercentage()));
+                holder.MeasurementItemView.setText(
+                        "Soil moisture was " +
+                                String.valueOf(current.getWaterPercentage()) + "% on: "
+                                    + df.format(current.getDate())
+                );
             } else {
                 // Covers the case of data not being ready yet.
                 holder.MeasurementItemView.setText("No Percentage");

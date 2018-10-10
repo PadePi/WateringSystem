@@ -3,7 +3,6 @@ package com.example.peti.wateringsystem;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -62,7 +61,7 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(StatActivity.this, NewWordActivity.class);
+                Intent intent = new Intent(StatActivity.this, NewMeasurementActivity.class);
                 startActivityForResult(intent, NEW_WORD_ACTIVITY_REQUEST_CODE);
             }
         });
@@ -73,7 +72,7 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Measurement measurement = new Measurement(data.getIntExtra(NewWordActivity.EXTRA_REPLY,0));
+            Measurement measurement = new Measurement(data.getIntExtra(NewMeasurementActivity.EXTRA_REPLY,0));
             mMeasurementViewModel.insert(measurement);
         } else {
             Toast.makeText(
