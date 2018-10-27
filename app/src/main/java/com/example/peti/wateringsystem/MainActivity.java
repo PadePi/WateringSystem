@@ -2,8 +2,6 @@ package com.example.peti.wateringsystem;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -12,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
@@ -95,8 +92,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_stat) {
             openStatActivity();
 
-        } else if (id == R.id.nav_schedule) {
-            openScheduleActivity();
+        } else if (id == R.id.nav_settings) {
+            openSettingsActivity();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -109,8 +106,8 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    public void openScheduleActivity(){
-        Intent intent = new Intent(this,ScheduleActivity.class);
+    public void openSettingsActivity(){
+        Intent intent = new Intent(this,SettingsActivity.class);
         startActivity(intent);
     }
 

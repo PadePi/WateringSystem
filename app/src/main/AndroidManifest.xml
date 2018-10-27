@@ -24,7 +24,7 @@
         <activity android:name=".StatActivity"
             android:parentActivityName=".MainActivity"
             android:launchMode="singleTop"/>
-        <activity android:name=".ScheduleActivity"
+        <activity android:name=".SettingsActivity"
             android:parentActivityName=".MainActivity"
             android:launchMode="singleTop"/>
         <activity android:name=".NewMeasurementActivity"

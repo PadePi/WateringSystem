@@ -9,9 +9,9 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="Statistics" />
         <item
-            android:id="@+id/nav_schedule"
+            android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Scheduler" />
+            android:title="Settings" />
     </group>
 
 </menu>

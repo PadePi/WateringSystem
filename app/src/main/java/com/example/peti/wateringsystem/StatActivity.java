@@ -125,7 +125,7 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_stat) {
             openStatActivity();
 
-        } else if (id == R.id.nav_schedule) {
+        } else if (id == R.id.nav_settings) {
             openScheduleActivity();
         }
 
@@ -140,7 +140,7 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void openScheduleActivity(){
-        Intent intent = new Intent(this,ScheduleActivity.class);
+        Intent intent = new Intent(this,SettingsActivity.class);
         startActivity(intent);
     }
 }

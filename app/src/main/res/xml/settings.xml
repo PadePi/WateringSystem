@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="basic_behaviour"
+        android:title="@string/pref_basicBehaviour"
+        android:entries="@array/pref_basicBehaviour_entries"
+        android:entryValues="@array/pref_basicBehaviour_values"
+        android:defaultValue="@string/pref_basicBehaviour_default_value"/>
+
+</PreferenceScreen>

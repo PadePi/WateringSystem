@@ -13,4 +13,18 @@
     <string name="hint_word">Measured water soil...</string>
     <string name="button_save">Save</string>
     <string name="empty_not_saved">Word not saved because it is empty.</string>
+    <string name="pref_basicBehaviour">Basic watering behaviour</string>
+    <string name="pref_basicBehaviour_dialog_title">Start watering depending on</string>
+    <string name="pref_basicBehaviour_default_value">Minimal water moisture</string>
+
+    <string-array name="pref_basicBehaviour_entries">
+        <item>Minimal water moisture</item>
+        <item>Scheduled days</item>
+    </string-array>
+
+    <string-array name="pref_basicBehaviour_values">
+        <item>Minimal water moisture</item>
+        <item>Scheduled days</item>
+    </string-array>
+
 </resources>

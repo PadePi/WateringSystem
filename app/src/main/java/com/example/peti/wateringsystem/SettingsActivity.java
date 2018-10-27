@@ -1,7 +1,6 @@
 package com.example.peti.wateringsystem;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,7 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-public class ScheduleActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class SettingsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +28,14 @@ public class ScheduleActivity extends AppCompatActivity implements NavigationVie
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        if(findViewById(R.id.fragment_container)!=null)
+        {
+            if(savedInstanceState!=null)
+                return;
+
+            getFragmentManager().beginTransaction().add(R.id.fragment_container,new SetingsFragment()).commit();
+        }
 
 
     }
@@ -53,7 +60,7 @@ public class ScheduleActivity extends AppCompatActivity implements NavigationVie
         if (id == R.id.nav_stat) {
             openStatActivity();
 
-        } else if (id == R.id.nav_schedule) {
+        } else if (id == R.id.nav_settings) {
             openScheduleActivity();
         }
 
@@ -68,7 +75,7 @@ public class ScheduleActivity extends AppCompatActivity implements NavigationVie
     }
 
     public void openScheduleActivity(){
-        Intent intent = new Intent(this,ScheduleActivity.class);
+        Intent intent = new Intent(this,SettingsActivity.class);
         startActivity(intent);
     }
 
