@@ -6,6 +6,23 @@
         android:title="@string/pref_basicBehaviour"
         android:entries="@array/pref_basicBehaviour_entries"
         android:entryValues="@array/pref_basicBehaviour_values"
-        android:defaultValue="@string/pref_basicBehaviour_default_value"/>
+        android:defaultValue="@string/pref_basicBehaviour_default_value"
+        android:dialogTitle="@string/pref_basicBehaviour_dialog_title"/>
+
+    <ListPreference
+        android:key="minimal_moisture"
+        android:title="@string/pref_minimalMoisture"
+        android:entries="@array/pref_minimalMoisture_entries"
+        android:entryValues="@array/pref_minimalMoisture_values"
+        android:defaultValue="@string/pref_minimalMoisture_default_value"
+        android:dialogTitle="@string/pref_minimalMoisture_dialog_title"/>
+
+    <MultiSelectListPreference
+        android:key="scheduled_days"
+        android:title="@string/pref_scheduled_days"
+        android:entries="@array/pref_scheduled_days_entries"
+        android:entryValues="@array/pref_scheduled_days_values"
+        android:dialogTitle="@string/pref_scheduled_days_dialog_title"/>
+
 
 </PreferenceScreen>

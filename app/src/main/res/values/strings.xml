@@ -27,4 +27,43 @@
         <item>Scheduled days</item>
     </string-array>
 
+    <string name="pref_minimalMoisture">Minimal moisture</string>
+    <string name="pref_minimalMoisture_dialog_title">Start watering when</string>
+    <string name="pref_minimalMoisture_default_value">Moisture under 40%</string>
+
+    <string-array name="pref_minimalMoisture_entries">
+        <item>Moisture under 40%</item>
+        <item>Moisture under 50%</item>
+        <item>Moisture under 60%</item>
+    </string-array>
+
+    <string-array name="pref_minimalMoisture_values">
+        <item>Moisture under 40%</item>
+        <item>Moisture under 50%</item>
+        <item>Moisture under 60%</item>
+    </string-array>
+
+    <string name="pref_scheduled_days">Watering days</string>
+    <string name="pref_scheduled_days_dialog_title">Water on</string>
+
+    <string-array name="pref_scheduled_days_entries">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
+    <string-array name="pref_scheduled_days_values">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
 </resources>
