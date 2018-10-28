@@ -20,6 +20,6 @@ public class MeasurementViewModel extends AndroidViewModel {
     LiveData<List<Measurement>> getAllMeasurements() { return mAllMeasurements; }
 
     public void insert(Measurement measurement) { mRepository.insert(measurement); }
-
+    public void deleteAll(){mRepository.deleteAll();}
 
 }

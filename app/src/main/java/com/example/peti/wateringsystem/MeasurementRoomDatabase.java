@@ -23,28 +23,8 @@ public abstract class MeasurementRoomDatabase extends RoomDatabase {
                 @Override
                 public void onOpen (@NonNull SupportSQLiteDatabase db){
                     super.onOpen(db);
-                    new PopulateDbAsync(INSTANCE).execute();
                 }
             };
-
-    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
-
-        private final MeasurementDAO mDao;
-
-        PopulateDbAsync(MeasurementRoomDatabase db) {
-            mDao = db.measurementDao();
-        }
-
-        @Override
-        protected Void doInBackground(final Void... params) {
-            mDao.deleteAll();
-            Measurement measurement = new Measurement(90);
-            mDao.insert(measurement);
-            measurement = new Measurement(50);
-            mDao.insert(measurement);
-            return null;
-        }
-    }
 
     static MeasurementRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
