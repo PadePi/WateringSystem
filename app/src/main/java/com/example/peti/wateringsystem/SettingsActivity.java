@@ -34,7 +34,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             if(savedInstanceState!=null)
                 return;
 
-            getFragmentManager().beginTransaction().add(R.id.fragment_container,new SetingsFragment()).commit();
+            getFragmentManager().beginTransaction().add(R.id.fragment_container,new SettingsFragment()).commit();
         }
 
 
