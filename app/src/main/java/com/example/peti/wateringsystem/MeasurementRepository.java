@@ -10,11 +10,13 @@ public class MeasurementRepository {
 
     private MeasurementDAO mMeasurementDao;
     private LiveData<List<Measurement>> mAllMeasurements;
+    private List<Measurement> mAllMeasurementsStatic;
 
     MeasurementRepository(Application application) {
         MeasurementRoomDatabase db = MeasurementRoomDatabase.getDatabase(application);
         mMeasurementDao = db.measurementDao();
         mAllMeasurements = mMeasurementDao.getAllMeasurement();
+        mAllMeasurementsStatic = mMeasurementDao.getAllMeasurementStatic();
     }
 
     LiveData<List<Measurement>> getmAllMeasurements() {
@@ -30,6 +32,9 @@ public class MeasurementRepository {
         new deleteAsyncTask(mMeasurementDao).execute();
     }
 
+    List<Measurement> getAllMeasurementsStatic() {
+        return mAllMeasurementsStatic;
+    }
 
 
     private static class insertAsyncTask extends AsyncTask<Measurement, Void, Void> {
@@ -61,5 +66,6 @@ public class MeasurementRepository {
             return null;
         }
     }
-
 }
+
+

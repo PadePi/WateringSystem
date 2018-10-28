@@ -19,4 +19,6 @@ public interface MeasurementDAO {
     @Query("SELECT * from measurements ORDER BY date DESC")
     LiveData<List<Measurement>> getAllMeasurement();
 
+    @Query("SELECT * from measurements ORDER BY date DESC")
+    List<Measurement> getAllMeasurementStatic();
 }

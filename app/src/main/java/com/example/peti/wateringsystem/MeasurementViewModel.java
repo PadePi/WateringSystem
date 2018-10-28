@@ -10,11 +10,14 @@ public class MeasurementViewModel extends AndroidViewModel {
 
     private MeasurementRepository mRepository;
     private LiveData<List<Measurement>> mAllMeasurements;
+    private List<Measurement> mAllMeasurementsStatic;
+
 
     public MeasurementViewModel (Application application) {
         super(application);
         mRepository = new MeasurementRepository(application);
         mAllMeasurements = mRepository.getmAllMeasurements();
+        mAllMeasurementsStatic=mRepository.getAllMeasurementsStatic();
     }
 
     LiveData<List<Measurement>> getAllMeasurements() { return mAllMeasurements; }
@@ -22,4 +25,7 @@ public class MeasurementViewModel extends AndroidViewModel {
     public void insert(Measurement measurement) { mRepository.insert(measurement); }
     public void deleteAll(){mRepository.deleteAll();}
 
+    public List<Measurement> getAllMeasurementsStatic() {
+        return mAllMeasurementsStatic;
+    }
 }

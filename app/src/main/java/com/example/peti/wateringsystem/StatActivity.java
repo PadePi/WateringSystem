@@ -61,6 +61,8 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        List<Measurement> measurements=mMeasurementViewModel.getAllMeasurementsStatic();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
