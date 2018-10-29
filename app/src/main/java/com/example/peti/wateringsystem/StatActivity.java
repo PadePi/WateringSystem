@@ -2,6 +2,7 @@ package com.example.peti.wateringsystem;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -19,11 +20,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
 
 public class StatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -61,7 +69,7 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        List<Measurement> measurements=mMeasurementViewModel.getAllMeasurementsStatic();
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +131,17 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
         }else if (id == R.id.delete_sample_data){
             mMeasurementViewModel.deleteAll();
         }else if (id == R.id.graph){
-            openGraphActivity();
+            if(countDifferentDaysOfMeasurements()>1)
+            {
+                openGraphActivity();
+            }else{
+                Context context = getApplicationContext();
+                CharSequence text = "Need at least 2 measurements";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -160,5 +178,22 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
     public void openGraphActivity(){
         Intent intent = new Intent(this,GraphActivity.class);
         startActivity(intent);
+    }
+
+    public int countDifferentDaysOfMeasurements()
+    {
+        List<Measurement> measurements=mMeasurementViewModel.getAllMeasurementsStatic();
+        Map<String,Integer> differentDaysOfMeasurements = new HashMap<String,Integer>();
+        for(Measurement measurement:measurements)
+        {
+            differentDaysOfMeasurements.putIfAbsent(new SimpleDateFormat("yyyy-MM-dd").format(measurement.getDate()),measurement.getWaterPercentage());
+        }
+        Calendar calendar=Calendar.getInstance();
+        calendar.add(Calendar.DATE,1);
+        Date d1=calendar.getTime();
+        differentDaysOfMeasurements.putIfAbsent(new SimpleDateFormat("yyyy-MM-dd").format(d1),20);
+
+
+        return differentDaysOfMeasurements.size();
     }
 }

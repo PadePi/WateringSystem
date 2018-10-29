@@ -10,13 +10,11 @@ public class MeasurementRepository {
 
     private MeasurementDAO mMeasurementDao;
     private LiveData<List<Measurement>> mAllMeasurements;
-    private List<Measurement> mAllMeasurementsStatic;
 
     MeasurementRepository(Application application) {
         MeasurementRoomDatabase db = MeasurementRoomDatabase.getDatabase(application);
         mMeasurementDao = db.measurementDao();
         mAllMeasurements = mMeasurementDao.getAllMeasurement();
-        mAllMeasurementsStatic = mMeasurementDao.getAllMeasurementStatic();
     }
 
     LiveData<List<Measurement>> getmAllMeasurements() {
@@ -33,7 +31,7 @@ public class MeasurementRepository {
     }
 
     List<Measurement> getAllMeasurementsStatic() {
-        return mAllMeasurementsStatic;
+        return mMeasurementDao.getAllMeasurementStatic();
     }
 
 
