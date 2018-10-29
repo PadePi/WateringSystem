@@ -11,4 +11,9 @@
         android:orderInCategory="100"
         android:title="Delete sample data"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/graph"
+        android:orderInCategory="100"
+        android:title="Graph"
+        app:showAsAction="never" />
 </menu>

@@ -122,6 +122,8 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
             mMeasurementViewModel.insert(new Measurement(30));
         }else if (id == R.id.delete_sample_data){
             mMeasurementViewModel.deleteAll();
+        }else if (id == R.id.graph){
+            openGraphActivity();
         }
 
         return super.onOptionsItemSelected(item);
@@ -152,6 +154,11 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
 
     public void openScheduleActivity(){
         Intent intent = new Intent(this,SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    public void openGraphActivity(){
+        Intent intent = new Intent(this,GraphActivity.class);
         startActivity(intent);
     }
 }
