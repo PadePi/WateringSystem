@@ -195,12 +195,6 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
         {
             differentDaysOfMeasurements.putIfAbsent(new SimpleDateFormat("yyyy-MM-dd").format(measurement.getDate()),measurement.getWaterPercentage());
         }
-        Calendar calendar=Calendar.getInstance();
-        calendar.add(Calendar.DATE,1);
-        Date d1=calendar.getTime();
-        differentDaysOfMeasurements.putIfAbsent(new SimpleDateFormat("yyyy-MM-dd").format(d1),20);
-
-
         return differentDaysOfMeasurements.size();
     }
 }
