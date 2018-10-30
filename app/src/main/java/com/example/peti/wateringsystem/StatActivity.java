@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 public class StatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -123,11 +124,17 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
         //noinspection SimplifiableIfStatement
         if (id == R.id.import_sample_data) {
             mMeasurementViewModel.deleteAll();
-            mMeasurementViewModel.insert(new Measurement(70));
-            mMeasurementViewModel.insert(new Measurement(60));
-            mMeasurementViewModel.insert(new Measurement(50));
-            mMeasurementViewModel.insert(new Measurement(40));
-            mMeasurementViewModel.insert(new Measurement(30));
+            List<Measurement> measurements=new ArrayList<>();
+            Calendar calendar= Calendar.getInstance();
+            Random random=new Random();
+            for(int i=0;i<100;i++)
+            {
+                Measurement tmp=new Measurement(random.nextInt(100));
+                tmp.setDate(calendar.getTime());
+                calendar.add(calendar.DATE,-1);
+                mMeasurementViewModel.insert(tmp);
+            }
+
         }else if (id == R.id.delete_sample_data){
             mMeasurementViewModel.deleteAll();
         }else if (id == R.id.graph){
