@@ -15,10 +15,18 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,11 +41,16 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class StatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private MeasurementViewModel mMeasurementViewModel;
-    public static final int NEW_WORD_ACTIVITY_REQUEST_CODE = 1;
+    private static final String TAG=StatActivity.class.getName();
+    private RequestQueue mRequestQueue;
+    private StringRequest stringRequest;
+    private String url="http://192.168.0.35/H";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,26 +89,12 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(StatActivity.this, NewMeasurementActivity.class);
-                startActivityForResult(intent, NEW_WORD_ACTIVITY_REQUEST_CODE);
+                sendMeasuringRequest();
             }
         });
 
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Measurement measurement = new Measurement(data.getIntExtra(NewMeasurementActivity.EXTRA_REPLY,0));
-            mMeasurementViewModel.insert(measurement);
-        } else {
-            Toast.makeText(
-                    getApplicationContext(),
-                    R.string.empty_not_saved,
-                    Toast.LENGTH_LONG).show();
-        }
-    }
 
     @Override
     public void onBackPressed() {
@@ -127,7 +126,7 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
             List<Measurement> measurements=new ArrayList<>();
             Calendar calendar= Calendar.getInstance();
             Random random=new Random();
-            for(int i=0;i<100;i++)
+            for(int i=0;i<10;i++)
             {
                 Measurement tmp=new Measurement(random.nextInt(100));
                 tmp.setDate(calendar.getTime());
@@ -196,5 +195,36 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
             differentDaysOfMeasurements.putIfAbsent(new SimpleDateFormat("yyyy-MM-dd").format(measurement.getDate()),measurement.getWaterPercentage());
         }
         return differentDaysOfMeasurements.size();
+    }
+
+    private void sendMeasuringRequest() {
+        mRequestQueue= Volley.newRequestQueue(this);
+        stringRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                response=response.replaceAll("(\\r|\\n)", "");
+                int actualResponse= Integer.parseInt(response);
+                int convertedValue=calculatePercentage(actualResponse);
+                Measurement measurement=new Measurement(convertedValue);
+                mMeasurementViewModel.insert(measurement);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG,"error: " + error.toString());
+            }
+        });
+
+        mRequestQueue.add(stringRequest);
+    }
+    //Analog reader provides a value between 0-4095.
+    //4095 means dry soil.
+    //I want to show the water percentage of the soil therefor i have to invert to usual percentage calculation
+        //with calcualtedPercenage-100*-1
+    //For example if I measured a value of 1000 and I round the maximum value to 4000
+        //then I measured 25%, but I actually want to return 75% because the soil is not dry
+    private int calculatePercentage(int analogInput)
+    {
+        return (int)((((double)analogInput/4095)*100)-100)*-1;
     }
 }
