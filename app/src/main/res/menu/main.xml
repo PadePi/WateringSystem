@@ -9,7 +9,7 @@
     <item
         android:id="@+id/delete_sample_data"
         android:orderInCategory="100"
-        android:title="Delete sample data"
+        android:title="Delete data"
         app:showAsAction="never" />
     <item
         android:id="@+id/graph"

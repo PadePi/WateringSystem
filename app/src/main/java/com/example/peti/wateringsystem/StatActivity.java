@@ -123,7 +123,6 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
         //noinspection SimplifiableIfStatement
         if (id == R.id.import_sample_data) {
             mMeasurementViewModel.deleteAll();
-            List<Measurement> measurements=new ArrayList<>();
             Calendar calendar= Calendar.getInstance();
             Random random=new Random();
             for(int i=0;i<10;i++)
