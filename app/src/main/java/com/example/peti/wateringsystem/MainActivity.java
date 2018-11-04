@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity
     private String baseUrl="http://192.168.0.35/";
     private String startPumpUrl ="startPump";
     private String stopPumpUrl ="stopPump";
+    private String getSoilMoistureUrl ="measureMoisture";
+    private TextView curentMoistureText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +53,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         mRequestQueue= Volley.newRequestQueue(this);
+
+        curentMoistureText=(TextView) findViewById(R.id.textView);
+        initializeSoilMoisture();
 
         final Button button = findViewById(R.id.button);
 
@@ -161,6 +166,35 @@ public class MainActivity extends AppCompatActivity
     public void openSettingsActivity(){
         Intent intent = new Intent(this,SettingsActivity.class);
         startActivity(intent);
+    }
+
+    private void initializeSoilMoisture() {
+        mRequestQueue= Volley.newRequestQueue(this);
+        stringRequest=new StringRequest(Request.Method.GET, baseUrl + getSoilMoistureUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                response=response.replaceAll("(\\r|\\n)", "");
+                int actualResponse= Integer.parseInt(response);
+                int convertedValue=calculatePercentage(actualResponse);
+                curentMoistureText.setText(curentMoistureText.getText() + " " + String.valueOf(convertedValue) + "%");
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Context context = getApplicationContext();
+                CharSequence text = "Something went wrong";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+        });
+
+        mRequestQueue.add(stringRequest);
+    }
+
+    private int calculatePercentage(int analogInput)
+    {
+        return (int)((((double)analogInput/4095)*100)-100)*-1;
     }
 
 }
