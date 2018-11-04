@@ -1,9 +1,11 @@
 package com.example.peti.wateringsystem;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity
     private String startPumpUrl ="startPump";
     private String stopPumpUrl ="stopPump";
     private String getSoilMoistureUrl ="measureMoisture";
+    private String getWaterLevelUrl ="waterLevel";
+
     private TextView curentMoistureText;
 
 
@@ -57,6 +61,8 @@ public class MainActivity extends AppCompatActivity
 
         curentMoistureText=(TextView) findViewById(R.id.textView);
         initializeSoilMoisture();
+
+        getWaterLevel();
 
         final Button button = findViewById(R.id.button);
 
@@ -169,7 +175,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initializeSoilMoisture() {
-        mRequestQueue= Volley.newRequestQueue(this);
         stringRequest=new StringRequest(Request.Method.GET, baseUrl + getSoilMoistureUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -195,6 +200,47 @@ public class MainActivity extends AppCompatActivity
     private int calculatePercentage(int analogInput)
     {
         return (int)((((double)analogInput/4095)*100)-100)*-1;
+    }
+
+    private void getWaterLevel()
+    {
+        stringRequest=new StringRequest(Request.Method.GET, baseUrl + getWaterLevelUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                response=response.replaceAll("(\\r|\\n)", "");
+                int actualResponse= Integer.parseInt(response);
+                if(actualResponse>20)
+                {
+                    showLowWaterAlert();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Context context = getApplicationContext();
+                CharSequence text = "Something went wrong";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+        });
+
+        mRequestQueue.add(stringRequest);
+    }
+
+    public void showLowWaterAlert()
+    {
+        AlertDialog alertDialog=new AlertDialog.Builder(MainActivity.this).create();
+        alertDialog.setTitle("Alert");
+        alertDialog.setMessage("Water level is low, please refill the tank");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.show();
     }
 
 }
