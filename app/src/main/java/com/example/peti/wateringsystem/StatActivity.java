@@ -202,7 +202,11 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i(TAG,"error: " + error.toString());
+                Context context = getApplicationContext();
+                CharSequence text = "Something went wrong";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
             }
         });
 

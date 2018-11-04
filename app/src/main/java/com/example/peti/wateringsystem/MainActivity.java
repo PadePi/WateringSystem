@@ -1,6 +1,8 @@
 package com.example.peti.wateringsystem;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,13 +23,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import static java.lang.Thread.sleep;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG=MainActivity.class.getName();
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
-    private String url="http://192.168.0.35/H";
+    private String baseUrl="http://192.168.0.35/";
+    private String startPumpUrl ="startPump";
+    private String stopPumpUrl ="stopPump";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,33 +51,78 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        mRequestQueue= Volley.newRequestQueue(this);
+
         final Button button = findViewById(R.id.button);
 
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 sendWateringRequest();
+                new stopWateringTask().execute();
             }
         });
 
     }
 
     private void sendWateringRequest() {
-        mRequestQueue= Volley.newRequestQueue(this);
-        stringRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        stringRequest=new StringRequest(Request.Method.POST, baseUrl + startPumpUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.i(TAG,"succes: " + response.toString());
+                Context context = getApplicationContext();
+                CharSequence text = "Watering started";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i(TAG,"error: " + error.toString());
+                Context context = getApplicationContext();
+                CharSequence text = "Something went wrong";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
             }
         });
 
         mRequestQueue.add(stringRequest);
     }
+
+    private class stopWateringTask extends AsyncTask<Void, Void, Void> {
+        protected Void doInBackground(Void... param) {
+
+            try {
+                sleep(10000);
+                stringRequest = new StringRequest(Request.Method.POST, baseUrl + stopPumpUrl, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Context context = getApplicationContext();
+                        CharSequence text = "Watering stopped";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Context context = getApplicationContext();
+                        CharSequence text = "Something went wrong";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
+                });
+                mRequestQueue.add(stringRequest);
+                return null;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+    }
+
+
 
     @Override
     public void onBackPressed() {
