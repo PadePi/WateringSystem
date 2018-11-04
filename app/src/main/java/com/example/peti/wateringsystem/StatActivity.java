@@ -29,19 +29,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 public class StatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -49,7 +41,7 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
     private static final String TAG=StatActivity.class.getName();
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
-    private String url="http://192.168.0.35/measureMoisture";
+    private String moistureUrl ="http://192.168.0.35/measureMoisture";
 
 
     @Override
@@ -198,7 +190,7 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
 
     private void sendMeasuringRequest() {
         mRequestQueue= Volley.newRequestQueue(this);
-        stringRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        stringRequest=new StringRequest(Request.Method.GET, moistureUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 response=response.replaceAll("(\\r|\\n)", "");
