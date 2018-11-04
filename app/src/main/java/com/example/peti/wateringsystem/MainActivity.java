@@ -69,11 +69,40 @@ public class MainActivity extends AppCompatActivity
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                sendWateringRequest();
-                new stopWateringTask().execute();
+                sendWateringRequestIfEnoughWater();
             }
         });
 
+    }
+
+    private void sendWateringRequestIfEnoughWater()
+    {
+        stringRequest=new StringRequest(Request.Method.GET, baseUrl + getWaterLevelUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                response=response.replaceAll("(\\r|\\n)", "");
+                int actualResponse= Integer.parseInt(response);
+                if(actualResponse>20)
+                {
+                    showLowWaterAlert();
+                }else
+                {
+                    sendWateringRequest();
+                    new stopWateringTask().execute();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Context context = getApplicationContext();
+                CharSequence text = "Something went wrong";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+        });
+
+        mRequestQueue.add(stringRequest);
     }
 
     private void sendWateringRequest() {
