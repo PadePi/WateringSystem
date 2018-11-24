@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity
     private String stopPumpUrl ="stopPump";
     private String getSoilMoistureUrl ="measureMoisture";
     private String getWaterLevelUrl ="waterLevel";
+    private final int criticalWaterLevel = 20;
 
     private TextView curentMoistureText;
 
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity
             public void onResponse(String response) {
                 response=response.replaceAll("(\\r|\\n)", "");
                 int actualResponse= Integer.parseInt(response);
-                if(actualResponse>20)
+                if(actualResponse>criticalWaterLevel)
                 {
                     showLowWaterAlert();
                 }else
@@ -238,7 +239,7 @@ public class MainActivity extends AppCompatActivity
             public void onResponse(String response) {
                 response=response.replaceAll("(\\r|\\n)", "");
                 int actualResponse= Integer.parseInt(response);
-                if(actualResponse>20)
+                if(actualResponse>criticalWaterLevel)
                 {
                     showLowWaterAlert();
                 }
