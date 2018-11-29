@@ -6,6 +6,12 @@
  */
 
 #include <WiFi.h>
+#include <Wire.h>
+#include "RTClib.h"
+
+RTC_DS3231 rtc;
+
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
 
 const char* ssid     = "UPC1179815";
@@ -33,18 +39,27 @@ boolean automatedByMoisture;
 
 int minimal_water_level;
 
-//indexes from 0 to 7 are weekdays from Monday to Sunday
+//indexes from 0 to 7 are weekdays from Sunday to Saturday
 //If index is true watering is needed on the day, otherwise it's false
 boolean daysToWater[7];
 
 boolean already_watered_today=false;
 
+char* currentDay;
 
 WiFiServer server(80);
 
 void setup()
 {
     Serial.begin(9600);
+    DateTime now = rtc.now();
+    
+    automatedByMoisture=true;
+
+    minimal_water_level=3000;
+
+    currentDay=daysOfTheWeek[now.dayOfTheWeek()];
+    
     pinMode(DIGITAL_PIN_PUMP, OUTPUT);      // set the water pump pin mode
 
     pinMode(SONIC_TRIGGER, OUTPUT); // Sets the trigPin as an Output
@@ -75,10 +90,34 @@ void setup()
 
 }
 
-int value = 0;
-
 void loop(){
  WiFiClient client = server.available();   // listen for incoming clients
+ DateTime now = rtc.now();
+ 
+ if(automatedByMoisture)
+ {
+    soil_moisture = analogRead(ANALOG_PIN_MOISTURE);
+    if(soil_moisture<minimal_water_level && !already_watered_today)
+    {
+      digitalWrite(DIGITAL_PIN_PUMP, HIGH);
+      delay(10000);
+      digitalWrite(DIGITAL_PIN_PUMP, LOW);
+      already_watered_today=true;
+    }
+ }
+
+ if(!automatedByMoisture)
+ {
+    if(daysToWater[now.dayOfTheWeek()] && !already_watered_today)
+    {
+      digitalWrite(DIGITAL_PIN_PUMP, HIGH);
+      delay(10000);
+      digitalWrite(DIGITAL_PIN_PUMP, LOW);
+      already_watered_today=true;
+    }
+ }
+
+ newDayInitialization();
 
   if (client) {                             // if you get a client,
     Serial.println("New Client.");           // print a message out the serial port
@@ -159,5 +198,15 @@ void loop(){
     // close the connection:
     client.stop();
     Serial.println("Client Disconnected.");
+  }
+}
+
+
+void newDayInitialization(){
+  DateTime now = rtc.now();
+  if(currentDay!=daysOfTheWeek[now.dayOfTheWeek()])
+  {
+    already_watered_today=false;
+    currentDay=daysOfTheWeek[now.dayOfTheWeek()];
   }
 }
