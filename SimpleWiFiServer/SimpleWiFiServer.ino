@@ -7,12 +7,13 @@
 
 #include <WiFi.h>
 
+
 const char* ssid     = "UPC1179815";
 const char* password = "QOECXIIM";
 
 //Analog Input for moisure sensor
 #define ANALOG_PIN_MOISTURE 36
-int analog_value = 0;
+int soil_moisture = 0;
 
 //Digital output for water pump
 #define DIGITAL_PIN_PUMP 2
@@ -20,9 +21,23 @@ int analog_value = 0;
 //Pins and variables for sonic sensor
 #define SONIC_TRIGGER 33
 #define SONIC_ECHO 32
+
 long duration;
 int distance;
 
+//variables for automation
+
+//If true watering will start automatically depending on minimal water level
+//If false watering will start automatically depending on scheduled days
+boolean automatedByMoisture;
+
+int minimal_water_level;
+
+//indexes from 0 to 7 are weekdays from Monday to Sunday
+//If index is true watering is needed on the day, otherwise it's false
+boolean daysToWater[7];
+
+boolean already_watered_today=false;
 
 
 WiFiServer server(80);
@@ -92,13 +107,13 @@ void loop(){
         // Check to see if the client request was "GET /H" or "GET /L":
         if (currentLine.endsWith("GET /measureMoisture")) {
 
-            analog_value = analogRead(ANALOG_PIN_MOISTURE);
+            soil_moisture = analogRead(ANALOG_PIN_MOISTURE);
             client.println("HTTP/1.1 200 OK");
             client.println("Content-type:text/html");
             client.println();
 
             // the content of the HTTP response follows the header:
-            client.print(analog_value);
+            client.print(soil_moisture);
 
             // The HTTP response ends with another blank line:
             client.println();
