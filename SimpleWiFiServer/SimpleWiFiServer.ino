@@ -37,7 +37,7 @@ int distance;
 //If false watering will start automatically depending on scheduled days
 boolean automatedByMoisture;
 
-int minimal_water_level;
+int minimal_soil_moisture;
 
 //indexes from 0 to 7 are weekdays from Sunday to Saturday
 //If index is true watering is needed on the day, otherwise it's false
@@ -56,7 +56,7 @@ void setup()
     
     automatedByMoisture=true;
 
-    minimal_water_level=3000;
+    minimal_soil_moisture=0;
 
     currentDay=daysOfTheWeek[now.dayOfTheWeek()];
     
@@ -95,10 +95,11 @@ void loop(){
  DateTime now = rtc.now();
  
  if(automatedByMoisture)
- {
+ {  
     soil_moisture = analogRead(ANALOG_PIN_MOISTURE);
-    if(soil_moisture<minimal_water_level && !already_watered_today)
+    if(soil_moisture<minimal_soil_moisture && !already_watered_today)
     {
+      Serial.println("Automated moisture condition matched");
       digitalWrite(DIGITAL_PIN_PUMP, HIGH);
       delay(10000);
       digitalWrite(DIGITAL_PIN_PUMP, LOW);
@@ -110,6 +111,7 @@ void loop(){
  {
     if(daysToWater[now.dayOfTheWeek()] && !already_watered_today)
     {
+      Serial.println("Automated by days condition matched");
       digitalWrite(DIGITAL_PIN_PUMP, HIGH);
       delay(10000);
       digitalWrite(DIGITAL_PIN_PUMP, LOW);
@@ -156,8 +158,6 @@ void loop(){
 
             // The HTTP response ends with another blank line:
             client.println();
-            
-
         }
         if (currentLine.endsWith("POST /startPump")) {
           digitalWrite(DIGITAL_PIN_PUMP, HIGH);                // Start water pump
@@ -192,12 +192,119 @@ void loop(){
           // The HTTP response ends with another blank line:
           client.println();
           
+        }if (currentLine.endsWith("POST /minimalWater")) {
+          Serial.println("Automation MOISTURE settings reached");
+          automatedByMoisture=true;
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-type:text/html");
+          client.println();
+          // The HTTP response ends with another blank line:
+          client.println();
+        }if (currentLine.endsWith("POST /scheduledDays")) {
+          Serial.println("Automation DAYS settings reached");
+          automatedByMoisture=false;
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-type:text/html");
+          client.println();
+          // The HTTP response ends with another blank line:
+          client.println();
+        }if (currentLine.endsWith("POST /under40")) {
+          Serial.println("UNDER 40 settings reached");
+          minimal_soil_moisture=4095 * 0.6; //need to multiply with (1.0-0.4) as 4095 means 100% dry
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-type:text/html");
+          client.println();
+          // The HTTP response ends with another blank line:
+          client.println();
+        }
+        if (currentLine.endsWith("POST /under50")) {
+          minimal_soil_moisture=4095 * 0.5;
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-type:text/html");
+          client.println();
+          // The HTTP response ends with another blank line:
+          client.println();
+        }if (currentLine.endsWith("POST /under60")) {
+          minimal_soil_moisture=4095 * 0.4; //need to multiply with (1.0-0.6) as 4095 means 100% dry
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-type:text/html");
+          client.println();
+          // The HTTP response ends with another blank line:
+          client.println();
+        }if (currentLine.indexOf("Sunday")>0) {
+          Serial.println("SUNDAY reached");
+          daysToWater[0]=true;
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-type:text/html");
+          client.println();
+          // The HTTP response ends with another blank line:
+          client.println();
+        }if (currentLine.indexOf("Monday")>0) {
+          daysToWater[1]=true;
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-type:text/html");
+          client.println();
+          // The HTTP response ends with another blank line:
+          client.println();
+        }
+        if (currentLine.indexOf("Tuesday")>0) {
+          daysToWater[2]=true;
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-type:text/html");
+          client.println();
+          // The HTTP response ends with another blank line:
+          client.println();
+        }if (currentLine.indexOf("Wednesday")>0) {
+          daysToWater[3]=true;
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-type:text/html");
+          client.println();
+          // The HTTP response ends with another blank line:
+          client.println();
+        }if (currentLine.indexOf("Thursday")>0) {
+          Serial.println("THURSDAY settings reached");
+          daysToWater[4]=true;
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-type:text/html");
+          client.println();
+          // The HTTP response ends with another blank line:
+          client.println();
+        }if (currentLine.indexOf("Friday")>0) {
+          daysToWater[5]=true;
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-type:text/html");
+          client.println();
+          // The HTTP response ends with another blank line:
+          client.println();
+        }if (currentLine.indexOf("Saturday")>0) {
+          daysToWater[6]=true;
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-type:text/html");
+          client.println();
+          // The HTTP response ends with another blank line:
+          client.println();
+        }if (currentLine.indexOf("noDaySelected")>0) {
+          int i;
+          for (i = 0; i < 7; ++i)
+          {
+              daysToWater[i] = false;
+          }
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-type:text/html");
+          client.println();
+          // The HTTP response ends with another blank line:
+          client.println();
         }
       }
     }
     // close the connection:
     client.stop();
-    Serial.println("Client Disconnected.");
+    Serial.println(currentDay);
+    Serial.println(now.dayOfTheWeek());
+    Serial.println(automatedByMoisture);
+    Serial.println(already_watered_today);
+    Serial.println(daysToWater[4]);
+    Serial.println(minimal_soil_moisture);
   }
 }
 
