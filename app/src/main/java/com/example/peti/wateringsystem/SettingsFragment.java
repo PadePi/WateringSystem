@@ -44,7 +44,7 @@ public class SettingsFragment extends PreferenceFragment {
                 if(key.equals(BASIC_BEHAVIOUR)) {
                     disabeOptions(sharedPref);
                     if (sharedPref.getString(BASIC_BEHAVIOUR, "").equals("Minimal water moisture")) {
-                        stringRequest = new StringRequest(Request.Method.GET, baseUrl + "minimalWater", new Response.Listener<String>() {
+                        stringRequest = new StringRequest(Request.Method.POST, baseUrl + "minimalWater", new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
 
@@ -58,7 +58,7 @@ public class SettingsFragment extends PreferenceFragment {
                         mRequestQueue.add(stringRequest);
                     }else
                     {
-                        stringRequest = new StringRequest(Request.Method.GET, baseUrl + "scheduledDays", new Response.Listener<String>() {
+                        stringRequest = new StringRequest(Request.Method.POST, baseUrl + "scheduledDays", new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
 
@@ -74,7 +74,7 @@ public class SettingsFragment extends PreferenceFragment {
                 }
                 if(key.equals(MINIMAL_MOISTURE)) {
                     if (sharedPref.getString(MINIMAL_MOISTURE, "").equals("Moisture under 40%")) {
-                        stringRequest = new StringRequest(Request.Method.GET, baseUrl + "under40", new Response.Listener<String>() {
+                        stringRequest = new StringRequest(Request.Method.POST, baseUrl + "under40", new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
 
@@ -89,7 +89,7 @@ public class SettingsFragment extends PreferenceFragment {
                         mRequestQueue.add(stringRequest);
                     }
                     if (sharedPref.getString(MINIMAL_MOISTURE, "").equals("Moisture under 50%")) {
-                        stringRequest = new StringRequest(Request.Method.GET, baseUrl + "under50", new Response.Listener<String>() {
+                        stringRequest = new StringRequest(Request.Method.POST, baseUrl + "under50", new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
 
@@ -104,7 +104,7 @@ public class SettingsFragment extends PreferenceFragment {
                         mRequestQueue.add(stringRequest);
                     }
                     if (sharedPref.getString(MINIMAL_MOISTURE, "").equals("Moisture under 60%")) {
-                        stringRequest = new StringRequest(Request.Method.GET, baseUrl + "under60", new Response.Listener<String>() {
+                        stringRequest = new StringRequest(Request.Method.POST, baseUrl + "under60", new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
 
@@ -126,7 +126,7 @@ public class SettingsFragment extends PreferenceFragment {
                     if(days_joined==""){
                         days_joined="noDaySelected";
                     }
-                    stringRequest = new StringRequest(Request.Method.GET, baseUrl + days_joined, new Response.Listener<String>() {
+                    stringRequest = new StringRequest(Request.Method.POST, baseUrl + days_joined, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
 
