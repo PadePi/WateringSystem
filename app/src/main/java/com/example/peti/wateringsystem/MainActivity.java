@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError error) {
                 Context context = getApplicationContext();
-                CharSequence text = "Something went wrong";
+                CharSequence text = "Arduino offline, check connection!";
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError error) {
                 Context context = getApplicationContext();
-                CharSequence text = "Something went wrong";
+                CharSequence text = "Arduino offline, check connection!";
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Context context = getApplicationContext();
-                        CharSequence text = "Something went wrong";
+                        CharSequence text = "Arduino offline, check connection!";
                         int duration = Toast.LENGTH_SHORT;
                         Toast toast = Toast.makeText(context, text, duration);
                         toast.show();
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError error) {
                 Context context = getApplicationContext();
-                CharSequence text = "Something went wrong";
+                CharSequence text = "Arduino offline, check connection!";
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError error) {
                 Context context = getApplicationContext();
-                CharSequence text = "Something went wrong";
+                CharSequence text = "Arduino offline, check connection!";
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
