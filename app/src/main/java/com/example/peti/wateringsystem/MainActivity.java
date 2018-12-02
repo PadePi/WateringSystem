@@ -3,8 +3,11 @@ package com.example.peti.wateringsystem;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -24,6 +27,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static java.lang.Thread.sleep;
 
@@ -58,10 +64,15 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        if(!isNetworkAvailable(this)) {
+            Toast.makeText(this,"No Internet connection",Toast.LENGTH_LONG).show();
+            finish();
+        }
         mRequestQueue= Volley.newRequestQueue(this);
 
         curentMoistureText=(TextView) findViewById(R.id.textView);
         initializeSoilMoisture();
+        syncSettings();
 
         getWaterLevel();
 
@@ -227,6 +238,106 @@ public class MainActivity extends AppCompatActivity
         mRequestQueue.add(stringRequest);
     }
 
+    private void syncSettings() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        final String BASIC_BEHAVIOUR="basic_behaviour";
+        final String MINIMAL_MOISTURE="minimal_moisture";
+        final String SCHEDULED_DAYS="scheduled_days";
+        if (sharedPref.getString(BASIC_BEHAVIOUR, "").equals("Minimal water moisture")) {
+            stringRequest = new StringRequest(Request.Method.POST, baseUrl + "minimalWater", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+            mRequestQueue.add(stringRequest);
+        }else
+        {
+            stringRequest = new StringRequest(Request.Method.POST, baseUrl + "scheduledDays", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+            mRequestQueue.add(stringRequest);
+        }
+
+        if (sharedPref.getString(MINIMAL_MOISTURE, "").equals("Moisture under 40%")) {
+            stringRequest = new StringRequest(Request.Method.POST, baseUrl + "under40", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+
+            mRequestQueue.add(stringRequest);
+        }
+        if (sharedPref.getString(MINIMAL_MOISTURE, "").equals("Moisture under 50%")) {
+            stringRequest = new StringRequest(Request.Method.POST, baseUrl + "under50", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+
+            mRequestQueue.add(stringRequest);
+        }
+        if (sharedPref.getString(MINIMAL_MOISTURE, "").equals("Moisture under 60%")) {
+            stringRequest = new StringRequest(Request.Method.POST, baseUrl + "under60", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+
+            mRequestQueue.add(stringRequest);
+        }
+
+        Set<String> days = sharedPref.getStringSet(SCHEDULED_DAYS, new HashSet<String>());
+        String days_joined = String.join("", days);
+        if(days_joined==""){
+            days_joined="noDaySelected";
+        }
+        stringRequest = new StringRequest(Request.Method.POST, baseUrl + days_joined, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        mRequestQueue.add(stringRequest);
+    }
+
     private int calculatePercentage(int analogInput)
     {
         return (int)((((double)analogInput/4095)*100)-100)*-1;
@@ -271,6 +382,13 @@ public class MainActivity extends AppCompatActivity
             }
         });
         alertDialog.show();
+    }
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(conMan.getActiveNetworkInfo() != null && conMan.getActiveNetworkInfo().isConnected())
+            return true;
+        else
+            return false;
     }
 
 }
