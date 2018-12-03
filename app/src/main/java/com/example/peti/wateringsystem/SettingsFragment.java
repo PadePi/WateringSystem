@@ -26,6 +26,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
+    private StringRequest stringRequest2;
     private String baseUrl="http://192.168.0.35/";
 
     @Override
@@ -124,22 +125,47 @@ public class SettingsFragment extends PreferenceFragment {
                     Set<String> days = sharedPref.getStringSet(SCHEDULED_DAYS, new HashSet<String>());
                     String days_joined = String.join("", days);
                     if(days_joined==""){
-                        days_joined="noDaySelected";
+                        stringRequest = new StringRequest(Request.Method.POST, baseUrl + "noDaySelected", new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        });
+                        mRequestQueue.add(stringRequest);
+
+                    }else{
+                        //first clear previous config, then send new days
+                        stringRequest = new StringRequest(Request.Method.POST, baseUrl + "noDaySelected", new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        });
+                        mRequestQueue.add(stringRequest);
+
+                        stringRequest2 = new StringRequest(Request.Method.POST, baseUrl + days_joined, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        });
+                        mRequestQueue.add(stringRequest2);
                     }
-                    stringRequest = new StringRequest(Request.Method.POST, baseUrl + days_joined, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-
-                        }
-                    });
-
-                    mRequestQueue.add(stringRequest);
-
                 }
             }
         };
