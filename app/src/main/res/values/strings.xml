@@ -17,7 +17,7 @@
     <string name="pref_basicBehaviour_default_value">Minimal water moisture</string>
 
     <string-array name="pref_basicBehaviour_entries">
-        <item>Minimal water moisture</item>
+        <item>Minimal soil moisture</item>
         <item>Scheduled days</item>
     </string-array>
 
