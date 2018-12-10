@@ -14,8 +14,8 @@ RTC_DS3231 rtc;
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
 
-const char* ssid     = "UPC1179815";
-const char* password = "QOECXIIM";
+const char* ssid     = "AndroidAPCEA3";
+const char* password = "12345678";
 
 //Analog Input for moisure sensor
 #define ANALOG_PIN_MOISTURE 36
@@ -46,6 +46,7 @@ boolean daysToWater[7];
 boolean already_watered_today=false;
 
 char* currentDay;
+int reversed_moisture;
 
 WiFiServer server(80);
 
@@ -97,7 +98,8 @@ void loop(){
  if(automatedByMoisture)
  {  
     soil_moisture = analogRead(ANALOG_PIN_MOISTURE);
-    if(soil_moisture<minimal_soil_moisture && !already_watered_today)
+    reversed_moisture=(soil_moisture-4095)*(-1);
+    if(reversed_moisture<minimal_soil_moisture && !already_watered_today)
     {
       Serial.println("Automated moisture condition matched");
       digitalWrite(DIGITAL_PIN_PUMP, HIGH);
@@ -210,7 +212,7 @@ void loop(){
           client.println();
         }if (currentLine.endsWith("POST /under40")) {
           Serial.println("UNDER 40 settings reached");
-          minimal_soil_moisture=4095 * 0.6; //need to multiply with (1.0-0.4) as 4095 means 100% dry
+          minimal_soil_moisture=4095 * 0.4;
           client.println("HTTP/1.1 200 OK");
           client.println("Content-type:text/html");
           client.println();
@@ -225,7 +227,7 @@ void loop(){
           // The HTTP response ends with another blank line:
           client.println();
         }if (currentLine.endsWith("POST /under60")) {
-          minimal_soil_moisture=4095 * 0.4; //need to multiply with (1.0-0.6) as 4095 means 100% dry
+          minimal_soil_moisture=4095 * 0.6;
           client.println("HTTP/1.1 200 OK");
           client.println("Content-type:text/html");
           client.println();
@@ -304,7 +306,17 @@ void loop(){
     Serial.println(automatedByMoisture);
     Serial.println(already_watered_today);
     Serial.println(daysToWater[4]);
+    Serial.println(reversed_moisture);
     Serial.println(minimal_soil_moisture);
+    int j=0;
+    String days;
+    for (j = 0; j < 7; ++j)
+    {
+      if(daysToWater[j]== true){
+        days+=daysOfTheWeek[j];
+      }
+    }
+    Serial.println(days);
   }
 }
 
