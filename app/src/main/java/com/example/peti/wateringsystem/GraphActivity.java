@@ -40,11 +40,6 @@ public class GraphActivity extends AppCompatActivity {
 
         }
 
-        Calendar calendar=Calendar.getInstance();
-        calendar.add(Calendar.DATE,1);
-        Date d1=calendar.getTime();
-
-        series.appendData(new DataPoint(d1,10),true,1000);
         graph.addSeries(series);
         graph.getViewport().setScrollable(true);
         graph.getViewport().setXAxisBoundsManual(true);
