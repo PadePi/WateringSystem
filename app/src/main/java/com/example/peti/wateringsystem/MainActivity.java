@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG=MainActivity.class.getName();
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
-    private String baseUrl="http://192.168.0.35/";
+    private String baseUrl="http://192.168.43.100/";
     private String startPumpUrl ="startPump";
     private String stopPumpUrl ="stopPump";
     private String getSoilMoistureUrl ="measureMoisture";

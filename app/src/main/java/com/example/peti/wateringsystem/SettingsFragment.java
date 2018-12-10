@@ -27,7 +27,7 @@ public class SettingsFragment extends PreferenceFragment {
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
     private StringRequest stringRequest2;
-    private String baseUrl="http://192.168.0.35/";
+    private String baseUrl="http://192.168.43.100/";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

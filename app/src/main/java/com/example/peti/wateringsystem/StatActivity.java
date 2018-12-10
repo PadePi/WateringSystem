@@ -41,7 +41,7 @@ public class StatActivity extends AppCompatActivity implements NavigationView.On
     private static final String TAG=StatActivity.class.getName();
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
-    private String moistureUrl ="http://192.168.0.35/measureMoisture";
+    private String moistureUrl ="http://192.168.43.100/measureMoisture";
 
 
     @Override
