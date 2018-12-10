@@ -102,10 +102,13 @@ void loop(){
     if(reversed_moisture<minimal_soil_moisture && !already_watered_today)
     {
       Serial.println("Automated moisture condition matched");
+      if(waterIfEnoughWater())
+      {
       digitalWrite(DIGITAL_PIN_PUMP, HIGH);
       delay(10000);
       digitalWrite(DIGITAL_PIN_PUMP, LOW);
       already_watered_today=true;
+      }
     }
  }
 
@@ -114,10 +117,13 @@ void loop(){
     if(daysToWater[now.dayOfTheWeek()] && !already_watered_today)
     {
       Serial.println("Automated by days condition matched");
+      if(waterIfEnoughWater())
+      {
       digitalWrite(DIGITAL_PIN_PUMP, HIGH);
       delay(10000);
       digitalWrite(DIGITAL_PIN_PUMP, LOW);
       already_watered_today=true;
+      }
     }
  }
 
@@ -162,7 +168,7 @@ void loop(){
             client.println();
         }
         if (currentLine.endsWith("POST /startPump")) {
-          digitalWrite(DIGITAL_PIN_PUMP, HIGH);                // Start water pump
+          waterIfEnoughWater();              // Start water pump
           client.println("HTTP/1.1 200 OK");
           client.println("Content-type:text/html");
           client.println();
@@ -327,5 +333,22 @@ void newDayInitialization(){
   {
     already_watered_today=false;
     currentDay=daysOfTheWeek[now.dayOfTheWeek()];
+  }
+}
+
+boolean waterIfEnoughWater(){
+  digitalWrite(SONIC_TRIGGER, LOW);
+  delayMicroseconds(2);
+  digitalWrite(SONIC_TRIGGER, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(SONIC_TRIGGER, LOW);
+  duration = pulseIn(SONIC_ECHO, HIGH);
+  distance= duration*0.034/2;
+  if(distance<20)
+  {
+    return true; 
+  }else
+  {
+    return false;
   }
 }
